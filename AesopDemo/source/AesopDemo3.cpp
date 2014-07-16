@@ -77,11 +77,12 @@ void hungerProblem()
 
 
    Action aOpenDoor("Open Door");
-   aOpenDoor.parameters(2);
-   aOpenDoor.condition(ArgsNotEqual);
-   aOpenDoor.condition(Fact(at), 0, Equals);
-   aOpenDoor.condition(Fact(at), Equals, loc1);
-   aOpenDoor.effect(Fact(adjacent) % loc2 % loc3, ptrue);
+   //aOpenDoor.parameters(2);
+   //aOpenDoor.condition(ArgsNotEqual);
+   //aOpenDoor.condition(Fact(at), loc2 , Equals);
+   //aOpenDoor.condition(Fact(at), Equals, loc1);
+   aOpenDoor.effect(Fact(adjacent) % loc2 % loc3, Set, ptrue);
+   aOpenDoor.effect(Fact(adjacent) % loc3 % loc2, Set, ptrue);
 
    // Flying movement action.
    //   Required: we are at location given by param 0
@@ -112,6 +113,8 @@ void hungerProblem()
    con.set(Fact(adjacent) % loc3 % loc2, pfalse); // adjacent(C, B) -> true
    con.set(Fact(adjacent) % loc2 % loc1, ptrue); // adjacent(B, A) -> true
 
+   con.set(Fact(adjacent) % loc1 % loc3, pfalse);
+   con.set(Fact(adjacent) % loc3 % loc1, pfalse);
 
    // Create a WorldState to represent our initial state.
    WorldState start(con);
@@ -121,7 +124,7 @@ void hungerProblem()
    start.set(Fact(have_food), pfalse);
 
    // Create another WorldState which will be our goal.
-   WorldState goal(con);
+   WorldState goal;
    goal.set(Fact(hungry), pfalse); // hungry() -> false
 
    // Make a plan to get from 'start' to 'goal'.
